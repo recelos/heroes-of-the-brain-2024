@@ -5,7 +5,8 @@ Example how to get measurements using brainaccess library
 Change Bluetooth device name to your device name (line 57)
 """
 import os
-path = "C:\\Uni\\TAI\\hakaton\\BrainAccessSDK"
+import sys
+path = sys.argv[1]
 os.add_dll_directory(path)
 
 import numpy as np
