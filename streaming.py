@@ -42,7 +42,7 @@ with EEGManager() as mgr:
 
     start_time = time.time()
     annotation = 1
-    while time.time() - start_time < 30:
+    while time.time() - start_time < 60:
         time.sleep(1)
         # send annotation to the device
         print(f"Sending annotation {annotation} to the device")
@@ -51,7 +51,8 @@ with EEGManager() as mgr:
         data = eeg.get_mne(tim=1)
         np_data = data.get_data()
         print(np_data[:, -1:])
-
+        #for idx, channel_name in enumerate(data.ch_names):
+        #    print(f"{channel_name}: {np_data[idx, -1]}")
 
     # get all eeg data and stop acquisition
     eeg.get_mne()
