@@ -163,3 +163,4 @@ cython_debug/
 
 bacore.dll
 bacore.lib
+/BrainAccessSDK/
