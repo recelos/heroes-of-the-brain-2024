@@ -1,6 +1,7 @@
 import os
 import sys
 import warnings
+from datetime import datetime
 
 path = sys.argv[1]
 os.add_dll_directory(path)
@@ -43,7 +44,7 @@ with EEGManager() as mgr:
 
     start_time = time.time()
     annotation = 1
-    while time.time() - start_time < 10:
+    while time.time() - start_time < 30:
         time.sleep(1)
         # send annotation to the device
         print(f"Sending annotation {annotation} to the device")
@@ -56,7 +57,7 @@ with EEGManager() as mgr:
     mgr.disconnect()
 
 # save EEG data to MNE fif format
-eeg.data.save('data/relax.fif')
+eeg.data.save(f'data/relax_{datetime.now().strftime("%Y%m%d_%H%M%S")}.fif')
 # Close brainaccess library
 eeg.close()
 # Show recorded data
