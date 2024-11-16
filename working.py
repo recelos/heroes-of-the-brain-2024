@@ -29,12 +29,14 @@ cap: dict = {
 }
 
 # define device name
-device_name = "BA HALO 017"
+device_name = "BA MINI 017"
 
 # start EEG acquisition setup
 with EEGManager() as mgr:
     eeg.setup(mgr, device_name=device_name, cap=cap)
 
+
+    print(mgr.get_device_info())
     # Start acquiring data
     eeg.start_acquisition()
     time.sleep(3)
@@ -54,7 +56,7 @@ with EEGManager() as mgr:
     mgr.disconnect()
 
 # save EEG data to MNE fif format
-eeg.data.save(f'data/{time.strftime("%Y%m%d_%H%M")}-raw.fif')
+eeg.data.save('data/relax.fif')
 # Close brainaccess library
 eeg.close()
 # Show recorded data
