@@ -54,7 +54,7 @@ with EEGManager() as mgr:
     mgr.disconnect()
 
 # save EEG data to MNE fif format
-eeg.data.save(f'{time.strftime("%Y%m%d_%H%M")}-raw.fif')
+eeg.data.save(f'data/{time.strftime("%Y%m%d_%H%M")}-raw.fif')
 # Close brainaccess library
 eeg.close()
 # Show recorded data
