@@ -37,6 +37,9 @@
             </div>
             <div class="col-center  col-md-6">
                 <h2>Pomodoro Session Settings</h2>
+                <input type="number" id="sessionsAmmount" class="custom-input" placeholder="Sessions Ammount">
+                <input type="number" id="focusTime" class="custom-input" placeholder="Focus Session Time [m]">
+                <input type="number" id="restTime" class="custom-input" placeholder="Rest Period Time [m]">
                 <button id="startSession" type="button">Start Session</button>
             </div>
         </div>
@@ -50,7 +53,7 @@
                     <!-- Focus -->
                     <div id="focus-box" class="session-image">
                         <img class="ring" src="{% static 'images/focus_ring.svg' %}">
-                        <img class="dot" src="{% static 'images/focus_dot.svg' %}">
+                        <img id="focus-dot" class="dot" src="{% static 'images/focus_dot.svg' %}">
                         <img class="focus" src="{% static 'images/focus.svg' %}">
                         <div class="wave-container">
                             <img class="focus-wave" src="{% static 'images/focus_wave.png' %}">
@@ -60,7 +63,7 @@
                     <!-- Chill -->
                     <div id="chill-box" class="session-image">
                         <img class="ring" src="{% static 'images/chill_ring.svg' %}">
-                        <img class="dot" src="{% static 'images/chill_dot.svg' %}">
+                        <img id="chill-dot" class="dot" src="{% static 'images/chill_dot.svg' %}">
                         <img class="chill" src="{% static 'images/chill.svg' %}">
                         <div class="wave-container">
                             <img class="focus-wave" src="{% static 'images/chill_wave.png' %}">
@@ -68,8 +71,9 @@
                     </div>
         
                 </div>
-                <div class="col-center  col-md-6">
-                    <h2 id="timer">05:00</h2>
+                <div class="col-center col-md-6">
+                    <h2>Round&nbsp;<span id="done">1</span>/<span id="total"></span></h2>
+                    <h1 id="timer">05:00</h1>
                 </div>
         </div>
         
