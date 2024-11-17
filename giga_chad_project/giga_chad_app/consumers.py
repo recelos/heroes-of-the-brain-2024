@@ -1,6 +1,8 @@
 from channels.generic.websocket import AsyncWebsocketConsumer
 import asyncio
 import json
+import time
+import random
 
 class BCIConsumer(AsyncWebsocketConsumer):
     async def connect(self):
@@ -81,16 +83,27 @@ class BluetoothDataService:
         with self.mgr:
             cap = {0: "F3", 1: "F4", 2: "C3", 3: "C4", 4: "P3", 5: "P4", 6: "O1", 7: "O2"}
             self.eeg.setup(self.mgr, device_name=self.device_name, cap=cap)
+            print("starting acquisition")
             self.eeg.start_acquisition()
             self.running = True
             threading.Thread(target=self._stream_data, daemon=True).start()
 
     def _stream_data(self):
         while self.running:
-            data = self.eeg.get_mne(tim=2)
-            self.data["voltages"] = data.get_data()[:, -1].tolist()
-            relax, focus = self._calculate_relax(data)
-            self.data.update({"relax": relax, "focus": focus})
+            try:
+                data = self.eeg.get_mne(tim=2)
+                if data.get_data().size > 0:
+                    self.data["voltages"] = data.get_data()[:, -1].tolist()
+                    relax, focus = self._calculate_relax(data)
+                    self.data.update({"relax": relax, "focus": focus})
+                else:
+                    print("Data buffer is empty. Retrying...")
+            except IndexError:
+                print("Data not yet available. Ensure acquisition is running.")
+            except Exception as e:
+                print(f"Error: {e}")
+            finally:
+                time.sleep(1)
 
     def stop_streaming(self):
         self.running = False
