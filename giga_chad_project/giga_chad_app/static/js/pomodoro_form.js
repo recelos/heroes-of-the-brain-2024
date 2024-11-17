@@ -1,8 +1,9 @@
 var focusTime
 var restTime
 var ammount
-var done = 1
+var done
 document.getElementById("startSession").addEventListener("click", function () {
+    done = 0
     ammount = document.getElementById('sessionsAmmount').value
     focusTime = document.getElementById('focusTime').value
     restTime = document.getElementById('restTime').value 
@@ -10,11 +11,14 @@ document.getElementById("startSession").addEventListener("click", function () {
     document.querySelector('#timer').textContent = focusTime + ":00";
     document.querySelector("#focus-dot").style["animationDuration"] = 60*focusTime+"s"
     document.querySelector("#chill-dot").style["animationDuration"] = 60*restTime+"s"
-    startTimer(focusTime, switchToChill);
     switchToFocus();
 });
 
 function switchToFocus() {
+    if(done >= ammount) {
+        switchToSetup()
+        return
+    }
     const gradientHome = document.querySelector(".gradient-home");
     const gradientFocus = document.querySelector(".gradient-focus");
     const gradientChill = document.querySelector(".gradient-chill");
@@ -26,6 +30,9 @@ function switchToFocus() {
     const focusBox = document.querySelector("#focus-box");
     const title = document.querySelector("#session-title");
     title.innerHTML = "Focus Session"
+
+    done += 1
+    document.querySelector('#done').innerHTML = done
     
     gradientHome.style.opacity = "0"; 
     gradientFocus.style.opacity = "1"; 
@@ -60,7 +67,31 @@ function switchToChill() {
 
     focusBox.style.display = "none"
     chillBox.style.display = "flex"
+
     startTimer(focusTime, switchToFocus);
+
+}
+
+function switchToSetup() {
+    const gradientHome = document.querySelector(".gradient-home");
+    const gradientFocus = document.querySelector(".gradient-focus");
+    const gradientChill = document.querySelector(".gradient-chill");
+
+    const settingsPanel = document.querySelector("#settings-panel");
+    const sessionPanel = document.querySelector("#session-panel");
+    const chillBox = document.querySelector("#chill-box");
+    const focusBox = document.querySelector("#focus-box");
+
+
+    gradientHome.style.opacity = "1"; 
+    gradientFocus.style.opacity = "0"; 
+    gradientChill.style.opacity = "0"; 
+
+    sessionPanel.style.display = "none"
+    
+    focusBox.style.display = "none"
+    chillBox.style.display = "none"
+    settingsPanel.style.display = "flex"
 }
 
 function startTimer(duration,  callback) {
