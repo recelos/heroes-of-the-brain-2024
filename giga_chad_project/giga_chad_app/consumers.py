@@ -91,6 +91,7 @@ class BluetoothDataService:
     def _stream_data(self):
         while self.running:
             try:
+                # TU SIĘ PIERDOLI
                 data = self.eeg.get_mne(tim=2)
                 if data.get_data().size > 0:
                     self.data["voltages"] = data.get_data()[:, -1].tolist()

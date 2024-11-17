@@ -1,6 +1,6 @@
 import os
 
-xd = "C:\\Uni\\TAI\\hakaton\\BrainAccessSDK"
+xd = "C:\\Users\\barte\\Desktop\\heroes\\SDK"
 os.add_dll_directory(xd)
 
 from django.core.asgi import get_asgi_application

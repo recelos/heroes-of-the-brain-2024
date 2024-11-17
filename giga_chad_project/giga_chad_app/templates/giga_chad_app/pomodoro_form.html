@@ -1,15 +1,79 @@
+<!-- Ja z góry przepraszam za ten kod xD -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Pomodoro Form</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+    <link rel="stylesheet" href="{% static 'css/pomodoro_form.css' %}">
 </head>
 <body>
-    <h2>Pomodoro Session Settings</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Submit</button>
-    </form>
+    <div class="background">
+        <div class="gradient gradient-home"></div>
+        <div class="gradient gradient-focus"></div>
+        <div class="gradient gradient-chill"></div>
+    </div>
+    <div class="container">
+
+        <!-- SETTINGSY -->
+
+        <div id="settings-panel" class="row">
+            <div class="col-center col-md-6">
+                <h2>Connect to the Device</h2>
+
+                <div class="form-group">
+                    <select id="device" class="custom-select">
+                        <option value="1">Option 1</option>
+                        <option value="2">Option 2</option>
+                        <option value="3">Option 3</option>
+                    </select>
+                </div>
+                <div class="brain-container">
+                    <img class="big-brain" src="{% static 'images/brain.svg' %}">          
+                </div>
+        
+                <button type="button">Connect</button>
+            </div>
+            <div class="col-center  col-md-6">
+                <h2>Pomodoro Session Settings</h2>
+                <button id="startSession" type="button">Start Session</button>
+            </div>
+        </div>
+
+        <!-- POMODORO -->
+
+        <div id="session-panel" class="row">
+                <div class="col-center col-md-6">
+                    <h2 id="session-title">Focus session</h2>
+
+                    <!-- Focus -->
+                    <div id="focus-box" class="session-image">
+                        <img class="ring" src="{% static 'images/focus_ring.svg' %}">
+                        <img class="dot" src="{% static 'images/focus_dot.svg' %}">
+                        <img class="focus" src="{% static 'images/focus.svg' %}">
+                        <div class="wave-container">
+                            <img class="focus-wave" src="{% static 'images/focus_wave.png' %}">
+                        </div>
+                    </div>
+
+                    <!-- Chill -->
+                    <div id="chill-box" class="session-image">
+                        <img class="ring" src="{% static 'images/chill_ring.svg' %}">
+                        <img class="dot" src="{% static 'images/chill_dot.svg' %}">
+                        <img class="chill" src="{% static 'images/chill.svg' %}">
+                        <div class="wave-container">
+                            <img class="focus-wave" src="{% static 'images/chill_wave.png' %}">
+                        </div>
+                    </div>
+        
+                </div>
+                <div class="col-center  col-md-6">
+                    <h2 id="timer">05:00</h2>
+                </div>
+        </div>
+        
+    </div>
+    <script src="{% static 'js/pomodoro_form.js' %}"></script>
 </body>
 </html>
