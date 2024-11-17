@@ -42,8 +42,15 @@ def calculate_relax(raw):
         band_idx = np.logical_and(freqs >= fmin, freqs <= fmax)
         band_powers[band] = psd_mean[band_idx].mean()
 
-    focus_level = band_powers["beta"] / band_powers["alpha"]
-    relaxaction_level = band_powers["alpha"] * band_powers["theta"] / (band_powers["beta"] + band_powers["gamma"])
+    focus_ratio = band_powers["beta"] / (band_powers["alpha"] + band_powers["theta"] + band_powers["gamma"] + 1e-6)
+    relax_ratio = (band_powers["alpha"] + band_powers["theta"]) / (band_powers["beta"] + band_powers["gamma"] + 1e-6)
+
+    # Normalize to 0-100% without clipping
+    max_relax = 160  # You can change this value as needed
+    max_focus = 0.032  # You can change this value as needed
+
+    focus_level = min((focus_ratio / max_focus) * 100, 100)
+    relaxaction_level = min((relax_ratio / max_relax) * 100, 100)
 
     return relaxaction_level, focus_level
 
@@ -74,7 +81,7 @@ with EEGManager() as mgr:
 
     start_time = time.time()
     annotation = 1
-    while time.time() - start_time < 60:
+    while time.time() - start_time < 30:
         time.sleep(2)
         print(f"Sending annotation {annotation} to the device")
         eeg.annotate(str(annotation))
