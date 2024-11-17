@@ -1,7 +1,9 @@
 import os
 import sys
-import warnings
+import mne
+import numpy as np
 from datetime import datetime
+from scipy.signal import welch
 
 path = sys.argv[1]
 os.add_dll_directory(path)
@@ -13,11 +15,44 @@ import time
 from brainaccess.utils import acquisition
 from brainaccess.core.eeg_manager import EEGManager
 
+
+def calculate_relax(raw):
+    raw.filter(0.5, 100)
+
+    bands = {
+        "theta": (4, 8),
+        "alpha": (8, 13),
+        "beta": (13, 30),
+        "gamma": (30, 100),
+    }
+
+    sampling_rate = raw.info["sfreq"]
+    n_per_seg = int(sampling_rate * 2)
+    
+    spectrum = raw.compute_psd(method="welch", fmin=0.5, fmax=100, n_fft=n_per_seg, n_per_seg=n_per_seg)
+    
+    freqs = spectrum.freqs  # Frequency bins
+    psd_data = spectrum.get_data(return_freqs=True)[0]  # Extract the PSD data
+
+    psd_mean = psd_data.mean(axis=0)  # Average across channels (axis 0)
+
+    band_powers = {}
+
+    for band, (fmin, fmax) in bands.items():
+        band_idx = np.logical_and(freqs >= fmin, freqs <= fmax)
+        band_powers[band] = psd_mean[band_idx].mean()
+
+    focus_level = band_powers["beta"] / band_powers["alpha"]
+    relaxaction_level = band_powers["alpha"] * band_powers["theta"] / (band_powers["beta"] + band_powers["gamma"])
+
+    return relaxaction_level, focus_level
+
+
+
 matplotlib.use("TKAgg", force=True)
 
 eeg = acquisition.EEG()
 
-# define electrode locations
 cap: dict = {
     0: "F3",
     1: "F4",
@@ -29,40 +64,35 @@ cap: dict = {
     7: "O2"
 }
 
-# define device name
 device_name = "BA MINI 017"
 
-# start EEG acquisition setup
 with EEGManager() as mgr:
     eeg.setup(mgr, device_name=device_name, cap=cap)
     print(mgr.get_device_info())
-    # Start acquiring data
     eeg.start_acquisition()
     time.sleep(3)
 
     start_time = time.time()
     annotation = 1
     while time.time() - start_time < 60:
-        time.sleep(1)
-        # send annotation to the device
+        time.sleep(2)
         print(f"Sending annotation {annotation} to the device")
         eeg.annotate(str(annotation))
         annotation += 1
-        data = eeg.get_mne(tim=1)
+        data = eeg.get_mne(tim=2)
+        relax, focus = calculate_relax(data)
+        print("Relax: ", relax)
+        print("Focus: ", focus)
         np_data = data.get_data()
-        print(np_data[:, -1:])
-        #for idx, channel_name in enumerate(data.ch_names):
+        # print(np_data[:, -1:])
+        # for idx, channel_name in enumerate(data.ch_names):
         #    print(f"{channel_name}: {np_data[idx, -1]}")
 
-    # get all eeg data and stop acquisition
     eeg.get_mne()
     eeg.stop_acquisition()
     mgr.disconnect()
 
-# save EEG data to MNE fif format
 eeg.data.save(f'data/data_{datetime.now().strftime("%Y%m%d_%H%M%S")}.fif')
-# Close brainaccess library
 eeg.close()
-# Show recorded data
 eeg.data.mne_raw.filter(1, 40).plot(scalings="auto", verbose=False)
 plt.show()
