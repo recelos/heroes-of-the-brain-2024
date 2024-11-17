@@ -30,7 +30,53 @@
                     </select>
                 </div>
                 <div class="brain-container">
-                    <img class="big-brain" src="{% static 'images/brain.svg' %}">          
+                    <svg id="dynamic-svg" width="177" height="157" viewBox="0 0 177 157" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M63.9167 0C54.7286 0 47.1078 6.28613 44.926 14.7801C44.6802 14.7801 44.4958 14.7188 44.25 14.7188C33.4026 14.7188 24.5833 23.5193 24.5833 34.3438C24.5833 35.8156 24.7677 37.2568 25.1057 38.6367C16.1328 42.3164 9.83333 51.0863 9.83333 61.3281C9.83333 65.1918 10.8167 68.7795 12.3839 72.0299C5.00885 76.2615 0 84.1115 0 93.2188C0 103.43 6.26875 112.2 15.1802 115.879C14.9036 117.29 14.75 118.731 14.75 120.203C14.75 132.407 24.6448 142.281 36.875 142.281C38.1349 142.281 39.3641 142.128 40.5625 141.913C43.5125 150.653 51.6865 157 61.4583 157C73.6885 157 83.5833 147.126 83.5833 134.922V19.625C83.5833 8.80059 74.7641 0 63.9167 0ZM177 93.2188C177 84.1115 171.991 76.2615 164.616 72.0299C166.214 68.7795 167.167 65.1918 167.167 61.3281C167.167 51.0863 160.867 42.3164 151.894 38.6367C152.202 37.2568 152.417 35.8156 152.417 34.3438C152.417 23.5193 143.597 14.7188 132.75 14.7188C132.504 14.7188 132.289 14.7801 132.074 14.7801C129.892 6.28613 122.271 0 113.083 0C102.236 0 93.4167 8.76992 93.4167 19.625V134.922C93.4167 147.126 103.311 157 115.542 157C125.314 157 133.487 150.653 136.437 141.913C137.636 142.128 138.865 142.281 140.125 142.281C152.355 142.281 162.25 132.407 162.25 120.203C162.25 118.731 162.096 117.29 161.82 115.879C170.731 112.2 177 103.43 177 93.2188Z" fill="#333333"/>
+                        <circle id="circle-1" cx="61" cy="135" r="11" fill="#E54304"/>
+                        <circle id="circle-2" cx="31" cy="105" r="11" fill="#FABE30"/>
+                        <circle id="circle-3" cx="31" cy="65" r="11" fill="#E54304"/>
+                        <circle id="circle-4" cx="64" cy="30" r="11" fill="#00C390"/>
+                        <circle id="circle-5" cx="11" cy="11" r="11" transform="matrix(-1 0 0 1 129 124)" fill="#00C390"/>
+                        <circle id="circle-6" cx="11" cy="11" r="11" transform="matrix(-1 0 0 1 159 94)" fill="#00C390"/>
+                        <circle id="circle-7" cx="11" cy="11" r="11" transform="matrix(-1 0 0 1 159 54)" fill="#E54304"/>
+                        <circle id="circle-8" cx="11" cy="11" r="11" transform="matrix(-1 0 0 1 124 19)" fill="#FABE30"/>
+                      </svg>
+                    
+                      <script>
+                        async function fetchCircleData() {
+                                try {
+                                    const response = await fetch('http://156.17.72.131:8000/data');
+                                    const data = await response.json();
+                                    return data.average_data;
+                                } catch (error) {
+                                    console.error("Error fetching data:", error);
+                                    return [];
+                                }
+                            }
+
+                            function getColor(value) {
+                                if (value > 0 && value <= 6000) {
+                                    return "#00C390";
+                                } else if (value > 6000 && value <= 10000) {
+                                    return "#FABE30";
+                                } else {
+                                    return "#E54304";
+                                }
+                            }
+                            async function updateCircleColors() {
+                            const data = await fetchCircleData();
+                            const svg = document.getElementById('dynamic-svg');
+                            const circles = svg.querySelectorAll('circle');
+
+                            circles.forEach((circle, index) => {
+                                    const value = data[index] || 0;
+                                    const color = getColor(value);
+                                    circle.setAttribute('fill', color);
+                                });
+                            }
+
+                            setInterval(updateCircleColors, 1000);
+                      </script>        
                 </div>
         
                 <button type="button">Connect</button>
