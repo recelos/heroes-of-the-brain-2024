@@ -1,0 +1,248 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+}
+
+.background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: -1; 
+}
+
+.gradient {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transition: opacity 3s ease;
+}
+
+.gradient-home {
+    background-image: linear-gradient(to right bottom, #ffaf49, #ebc356, #d8d36d, #c8e189, #bceca8, #aef0be, #a5f3d3, #a3f5e5, #9ef1f2, #a1ecfb, #abe6ff, #b9dfff);;
+    opacity: 1; 
+}
+
+.gradient-focus {
+    opacity: 0;
+    background: linear-gradient(135deg, #FFAF49 0%, #FFF49D 75%);
+}
+.gradient-chill {
+    opacity: 0;
+    background: linear-gradient(135deg, #B7F8D0 0%, #B9DFFF 75%);
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 40px;
+    height: 100%;
+    font-family: Arial, sans-serif;
+    max-width: none;
+}
+
+h2 {
+    font-size: 2.5rem;
+    color: #333;
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    color: #fff;
+    background-color: #007BFF;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+.row {
+    width: 100%;
+}
+
+.col-center {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+
+.custom-input {
+    display: block;
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 1rem;
+    color: #495057; /* Neutralny kolor tekstu */
+    background-color: #fff; /* Białe tło */
+    border: 1px solid #ced4da; /* Jasnoszary obramowanie */
+    border-radius: 0.25rem; /* Zaokrąglone rogi */
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out; /* Płynne przejście */
+}
+
+.custom-input::placeholder {
+    color: #6c757d;
+    opacity: 0.7;
+}
+
+.custom-input:focus {
+    border-color: #80bdff;
+    outline: none;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.custom-input:disabled {
+    background-color: #e9ecef;
+    color: #6c757d; 
+    border-color: #ced4da; 
+}
+
+.form-group {
+    width: 100%;
+    max-width: 400px; 
+    margin: 0 auto; 
+}
+
+
+.custom-select {
+    display: block;
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 1rem;
+    color: #495057;
+    background-color: #fff;
+    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg xmlns%3D%22http%3A//www.w3.org/2000/svg%22 viewBox%3D%220 0 4 5%22%3E%3Cpath fill%3D%22%23495057%22 d%3D%22M2 0L0 2h4zm0 5L0 3h4z%22/%3E%3C/svg%3E');
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 8px 10px;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.custom-select:focus {
+    border-color: #80bdff; 
+    outline: none;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.custom-select:disabled {
+    background-color: #e9ecef;
+    color: #6c757d;
+}
+
+.custom-select option {
+    color: #212529;
+}
+
+.form-group {
+    width: 100%;
+    margin: 0 auto; 
+}
+
+.brain-container {
+display: flex;
+justify-content: center;
+width: 100%;
+}
+
+.big-brain {
+    width: 30%;
+}
+
+#session-panel {
+    display: none;
+}
+
+.session-image {
+    width: 80%;
+    aspect-ratio: 1;
+    margin: auto;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+}
+
+.ring {
+    position: absolute;
+    width: 100%;
+    padding: 2.38%;
+}
+.dot {
+    position: absolute;
+    width: 100%;
+    animation-name: spin;
+    animation-duration: 50000ms;
+    animation-delay: 1s;
+    animation-iteration-count: 1;
+    animation-timing-function: linear; 
+}
+
+.session-image .focus {
+    position: absolute;
+    width: 100%;
+    padding: 15.3% 13.3% 12.3% 13.3%;
+}
+
+.session-image .chill {
+    position: absolute;
+    width: 100%;
+    padding: 13.3%;
+}
+
+.wave-container {
+    position: absolute;
+    width: 91%;
+    height: 91%;
+    padding: 2.38%;
+    border-radius: 50%;
+    overflow: hidden;
+    position: relative;
+}
+
+.focus-wave {
+    height: 100%;
+    margin-top: 70%;
+    object-fit: cover;
+    animation: scroll 5s linear infinite;
+}
+
+#chill-box {
+    display: none;
+}
+
+@keyframes scroll {
+	0% { transform: translateX(0); }
+	100% { transform: translateX(calc(-33%))}
+}
+
+@keyframes spin {
+    from {
+        transform:rotate(0deg);
+    }
+    to {
+        transform:rotate(360deg);
+    }
+}
+
+h1 {
+    font-size: 4.5rem;
+    color: #333;
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
+    text-align: center;
+}

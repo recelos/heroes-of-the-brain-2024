@@ -1,9 +1,13 @@
 import os
+
+xd = "C:\\Users\\barte\\Desktop\\heroes\\SDK"
+os.add_dll_directory(xd)
+
 from django.core.asgi import get_asgi_application
 from channels.routing import ProtocolTypeRouter, URLRouter
 from channels.auth import AuthMiddlewareStack
 from django.urls import path
-from giga_chad_app import consumers  # Adjust based on your app name
+from giga_chad_app import consumers
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "giga_chad_project.settings")
 
