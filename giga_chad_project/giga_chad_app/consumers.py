@@ -78,6 +78,7 @@ class BluetoothDataService:
         self.mgr = EEGManager()
         self.data = {"voltages": [], "relax": 0, "focus": 0}
         self.running = False
+        self.ann_count = 0
 
     def start_streaming(self):
         with self.mgr:
@@ -86,24 +87,45 @@ class BluetoothDataService:
             print("starting acquisition")
             self.eeg.start_acquisition()
             self.running = True
-            threading.Thread(target=self._stream_data, daemon=True).start()
 
-    def _stream_data(self):
-        while self.running:
-            try:
-                data = self.eeg.get_mne(tim=2)
+            while True:
+                time.sleep(2)
+                self.eeg.annotate(str(self.ann_count))
+                self.ann_count += 1
+                data = self.eeg.get_mne(tim=.5)
+
                 if data.get_data().size > 0:
-                    self.data["voltages"] = data.get_data()[:, -1].tolist()
+                    # self.data["voltages"] = data.get_data()[:, -1].tolist()
                     relax, focus = self._calculate_relax(data)
                     self.data.update({"relax": relax, "focus": focus})
                 else:
                     print("Data buffer is empty. Retrying...")
-            except IndexError:
-                print("Data not yet available. Ensure acquisition is running.")
-            except Exception as e:
-                print(f"Error: {e}")
-            finally:
-                time.sleep(1)
+            # except IndexError:
+                # print("Data not yet available. Ensure acquisition is running.")
+
+
+            # threading.Thread(target=self._stream_data, daemon=True).start()
+
+    def _stream_data(self):
+        # while self.running:
+        #     try:
+            time.sleep(2)
+            self.eeg.annotate(str(self.ann_count))
+            self.ann_count += 1
+            data = self.eeg.get_mne(tim=.5)
+
+            if data.get_data().size > 0:
+                # self.data["voltages"] = data.get_data()[:, -1].tolist()
+                relax, focus = self._calculate_relax(data)
+                self.data.update({"relax": relax, "focus": focus})
+            else:
+                print("Data buffer is empty. Retrying...")
+        # except IndexError:
+            print("Data not yet available. Ensure acquisition is running.")
+        # except Exception as e:
+            # print(f"Error: {e}")
+        # finally:
+        #     time.sleep(1)
 
     def stop_streaming(self):
         self.running = False
