@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>BCI Plot View</title>
+    <style>
+        .diode {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin: 5px;
+            display: inline-block;
+        }
+        .on {
+            background-color: green;
+        }
+        .off {
+            background-color: gray;
+        }
+        .disabled {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h2>BCI Channel Voltage</h2>
+    <div>
+        <div id="diodes"></div>
+    </div>
+
+    <h3>Voltages (Microvolts)</h3>
+    <div id="voltages"></div>
+    <button class="disabled" onclick="redirectToMain()">Napierdalamy</button>
+    <script>
+        const socket = new WebSocket('ws://127.0.0.1:7000/ws/bci/');
+
+        socket.onmessage = function(event) {
+            const data = JSON.parse(event.data);
+            const diodesContainer = document.getElementById('diodes');
+            const voltagesContainer = document.getElementById('voltages');
+
+            diodesContainer.innerHTML = '';
+            voltagesContainer.innerHTML = '';
+
+            data.diodes.forEach((isOn, index) => {
+                const diode = document.createElement('div');
+                diode.classList.add('diode');
+                if (isOn) {
+                    diode.classList.add('on');
+                } else {
+                    diode.classList.add('off');
+                }
+                diodesContainer.appendChild(diode);
+            });
+
+            data.voltages.forEach(voltage => {
+                const voltageElem = document.createElement('p');
+                voltageElem.textContent = voltage + " µV";
+                voltagesContainer.appendChild(voltageElem);
+            });
+
+            let i = 0;
+            data.voltages.forEach(voltage => {
+                if (voltage > 100) {
+                    i++;
+                }
+            });
+            if(i > 3) {
+                document.querySelector('button').classList.remove('disabled');
+            } else {
+                document.querySelector('button').classList.add('disabled');
+            }
+        };
+
+        socket.onopen = function() {
+            console.log("Connected to WebSocket");
+        };
+
+        socket.onclose = function() {
+            console.log("Disconnected from WebSocket");
+        };
+
+        function redirectToMain() {
+            window.location.href = 'http://127.0.0.1:8000/info/';
+        }
+    </script>
+</body>
+</html>
