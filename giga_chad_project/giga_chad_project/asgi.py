@@ -1,4 +1,8 @@
 import os
+
+xd = "C:\\Uni\\TAI\\hakaton\\BrainAccessSDK"
+os.add_dll_directory(xd)
+
 from django.core.asgi import get_asgi_application
 from channels.routing import ProtocolTypeRouter, URLRouter
 from channels.auth import AuthMiddlewareStack
